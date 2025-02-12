@@ -1,0 +1,39 @@
+To deploy:
+
+Ada System:
+ada
+
+Copy
+declare
+   Processor : Data_Processor;
+   Monitor   : Safety_Monitor;
+begin
+   Monitor.Start;
+   -- Process safety-critical data
+   Processor.Process_Traffic_Data(Some_Data);
+end;
+Go System:
+bash
+
+Copy
+# Build and run
+go build
+./security-monitor -workers 100
+
+
+
+# Deploy to Google Cloud Run
+gcloud run deploy security-monitor \
+    --source . \
+    --platform managed \
+    --region us-central1 \
+    --memory 2Gi \
+    --concurrency 80
+
+# Deploy to AWS ECS
+aws ecs create-service \
+    --cluster security-cluster \
+    --service-name security-monitor \
+    --task-definition security-monitor:1 \
+    --desired-count 3
+
